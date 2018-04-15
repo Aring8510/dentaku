@@ -1,16 +1,21 @@
+#-----------------------------------------------------------------------------#
 def calc(arg_list):#逆ポーランド記法を受け取り，計算結果を返すメソッド
     while len(arg_list)>1:#リストがただ一つの数値となった場合計算を終了する
         for i in range(len(arg_list)):#リストの個数分
             if isinstance(arg_list[i],str):#文字列すなわち演算子ならば
                 if arg_list[i]=='+':#足し算ならば
                     arg_list[i-2]+=arg_list[i-1]#足す
+                    print(arg_list)
                 elif arg_list[i]=='*':
                     arg_list[i-2]*=arg_list[i-1]
+                    print(arg_list)
                 elif arg_list[i]=='-':
                     arg_list[i-2]-=arg_list[i-1]
+                    print(arg_list)
                 elif arg_list[i]=='/':
                     if arg_list[i-1]!=0:#0除算でない場合
                         arg_list[i-2]=arg_list[i-2]/arg_list[i-1]#割る
+                        print(arg_list)
                     else:#0除算の場合
                         print("注意!!\n0で除算されました")#警告を出す
                         arg_list[i-2]=0#0を返す（仕様）
@@ -19,7 +24,7 @@ def calc(arg_list):#逆ポーランド記法を受け取り，計算結果を返
                 break
     print(arg_list[i-2])#計算結果を出力
     return
-
+#-----------------------------------------------------------------------------------#
 def conv_ch_to_num(ch):#文字列を数値に変換可能か確認する
     comma=0
     if ch.rfind(".")!=-1:#"."を含むかどうか
@@ -30,16 +35,76 @@ def conv_ch_to_num(ch):#文字列を数値に変換可能か確認する
         return ch
     else :
         return ch
-
+#------------------------------------------------------------------------------------#
 def conv_RPN(rpn):#中間記法を逆ポーランド記法へ変換する
-    pass
+    nest = 0
+    maxnest=0
+    remove_list = []
+    rpn_nest = []
+    for i in range(len(rpn)):
+        if rpn[i]=='(':
+            nest+=1
+            rpn_nest.append(-2)
+            remove_list.append(i)
+        elif rpn[i]==')':
+            nest-=1
+            rpn_nest.append(-2)
+            remove_list.append(i)
+        elif rpn[i]== '*' or rpn[i]=='/':
+            rpn_nest.append(2*nest+2)
+            if 2*nest+2>maxnest:
+                maxnest=2*nest+2
+        elif rpn[i]== '+' or rpn[i]=='-':
+            rpn_nest.append(2*nest+1)
+            if 2*nest+1>maxnest:
+                maxnest=2*nest+1
+        else :
+            rpn_nest.append(0)
+    print(rpn_nest)
+    print(maxnest)
+#---*---*---*---*---*---*---*---*---*---*---*---*---*---*---*---*---*---*---*---*#
+    for i in range(len(remove_list)):#括弧の部分を削除
+        del rpn[remove_list[i]-i]
+        del rpn_nest[remove_list[i]-i]
+    print(rpn_nest)
+    for i in range(maxnest):
+        search_nest=maxnest-i
+        search_index=0
+        while search_index<len(rpn):
+            if rpn_nest[search_index]==search_nest:
+                index=search_index+1
+                while index<len(rpn):
+                    if rpn_nest[index]>0:
+                        rpn_nest.insert(index,rpn_nest[search_index]*-1)
+                        del rpn_nest[search_index]
+                        rpn.insert(index,rpn[search_index])
+                        del rpn[search_index]
+                        print(rpn_nest)
+                        print(rpn)
+                        break
+                    if index==len(rpn)-1:
+                        rpn_nest.append(rpn_nest[search_index]*-1)
+                        del rpn_nest[search_index]
+                        rpn.append(rpn[search_index])
+                        del rpn[search_index]
+                        print(rpn_nest)
+                        print(rpn)
+                        break
+                    index+=1
+            search_index+=1
+
+    print(rpn_nest)
+    print(rpn)
+    return rpn
+
+#------------------------------(メイン)--------------------------------------#
 import sys#コマンドライン引数を受け取る
 del sys.argv[0]#ファイル名削除
 print(sys.argv)
 for i in range(len(sys.argv)):#引数の型をただす
     sys.argv[i]=conv_ch_to_num(sys.argv[i])
 print(sys.argv)
+calc(conv_RPN(sys.argv))
 
-#pass_list = [4,1,2,"+",0,"/","*"]#逆ポーランド記法のリストを作成
 #calc(pass_list)#逆ポーランド記法を渡す
 
