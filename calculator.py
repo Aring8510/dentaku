@@ -92,6 +92,18 @@ def conv_RPN(rpn):#中間記法を逆ポーランド記法へ変換する
     #print(rpn_nest)
     #print(rpn)
     return rpn
+def memory_return(arg,memo):
+    if  arg.replace("m","").isdigit():
+        if int(arg.replace("m",""))<=len(memo)-1:
+            print("call memoret")
+            return str(memo[int(arg.replace("m",""))])
+        else:
+            print("メモリーが範囲外です．0を返します")
+            return 0
+    else:
+        print("メモリーのインデックスが不正です．0を返します")
+        return 0
+
 
 #------------------------------(メイン)--------------------------------------#
 #import sys#コマンドライン引数を受け取る
@@ -106,6 +118,10 @@ while 1:
     input_list = input_list.split()
     if input_list[0] == "end":
         break
+    for i in range(len(input_list)):
+        if input_list[i].find('m')==0:
+            input_list[i]=memory_return(input_list[i],memo)
+
     #print(input_list)
     for i in range(len(input_list)):#引数の型をただす
         input_list[i]=conv_ch_to_num(input_list[i])
