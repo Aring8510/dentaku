@@ -98,10 +98,12 @@ def conv_RPN(rpn):#中間記法を逆ポーランド記法へ変換する
 #del sys.argv[0]#ファイル名削除
 #print(sys.argv)
 while 1:
-    print("半角スペース区切りで計算式を入力\n括弧付き計算可能")
+    print("半角スペース区切りで計算式を入力\n括弧付き計算可能\n[end]で終了")
     input_list = ""
     input_list = input()
     input_list = input_list.split()
+    if input_list[0] == "end":
+        break
     print(input_list)
     for i in range(len(input_list)):#引数の型をただす
         input_list[i]=conv_ch_to_num(input_list[i])
