@@ -17,10 +17,10 @@ def calc(arg_list):#逆ポーランド記法を受け取り，計算結果を返
                         arg_list[i-2]=0#0を返す（仕様）
                 del arg_list[i-1]#空いたリスト2つを削除
                 del arg_list[i-1]
-                print(arg_list)
+                #print(arg_list)
                 break
-    print(arg_list[i-2])#計算結果を出力
-    return
+    print("計算結果："+str(arg_list[i-2]))#計算結果を出力
+    return arg_list[i-2]
 #-----------------------------------------------------------------------------------#
 def conv_ch_to_num(ch):#文字列を数値に変換可能か確認する
     comma=0
@@ -57,8 +57,8 @@ def conv_RPN(rpn):#中間記法を逆ポーランド記法へ変換する
                 maxnest=2*nest+1
         else :
             rpn_nest.append(0)
-    print(rpn_nest)
-    print("最大深さ："+str(maxnest))
+    #print(rpn_nest)
+    #print("最大深さ："+str(maxnest))
 #---*---*---*---*---*---*---*---*---*---*---*---*---*---*---*---*---*---*---*---*#
     for i in range(len(remove_list)):#括弧の部分を削除
         del rpn[remove_list[i]-i]
@@ -75,39 +75,41 @@ def conv_RPN(rpn):#中間記法を逆ポーランド記法へ変換する
                         del rpn_nest[search_index]
                         rpn.insert(index,rpn[search_index])
                         del rpn[search_index]
-                        print(rpn_nest)
-                        print(rpn)
+                        #print(rpn_nest)
+                        #print(rpn)
                         break
                     if index==len(rpn)-1:
                         rpn_nest.append(rpn_nest[search_index]*-1)
                         del rpn_nest[search_index]
                         rpn.append(rpn[search_index])
                         del rpn[search_index]
-                        print(rpn_nest)
-                        print(rpn)
+                        #print(rpn_nest)
+                        #print(rpn)
                         break
                     index+=1
             search_index+=1
 
-    print(rpn_nest)
-    print(rpn)
+    #print(rpn_nest)
+    #print(rpn)
     return rpn
 
 #------------------------------(メイン)--------------------------------------#
 #import sys#コマンドライン引数を受け取る
 #del sys.argv[0]#ファイル名削除
 #print(sys.argv)
+memo = []
+print("括弧付き計算可能")
 while 1:
-    print("半角スペース区切りで計算式を入力\n括弧付き計算可能\n[end]で終了")
+    print("半角スペース区切りで計算式を入力\n[end]で終了")
     input_list = ""
     input_list = input()
     input_list = input_list.split()
     if input_list[0] == "end":
         break
-    print(input_list)
+    #print(input_list)
     for i in range(len(input_list)):#引数の型をただす
         input_list[i]=conv_ch_to_num(input_list[i])
-    print()
-    calc(conv_RPN(input_list))
+    memo.append(calc(conv_RPN(input_list)))
+    print("メモリー："+str(memo)+"\n------------------------------------------------------")
 
 
