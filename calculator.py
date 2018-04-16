@@ -97,15 +97,15 @@ def conv_RPN(rpn):#中間記法を逆ポーランド記法へ変換する
 #import sys#コマンドライン引数を受け取る
 #del sys.argv[0]#ファイル名削除
 #print(sys.argv)
-print("半角スペース区切りで計算式を入力\n括弧付き計算可能")
-input_list = ""
-input_list = input()
-input_list = input_list.split()
-print(input_list)
-for i in range(len(input_list)):#引数の型をただす
-    input_list[i]=conv_ch_to_num(input_list[i])
-print()
-calc(conv_RPN(input_list))
+while 1:
+    print("半角スペース区切りで計算式を入力\n括弧付き計算可能")
+    input_list = ""
+    input_list = input()
+    input_list = input_list.split()
+    print(input_list)
+    for i in range(len(input_list)):#引数の型をただす
+        input_list[i]=conv_ch_to_num(input_list[i])
+    print()
+    calc(conv_RPN(input_list))
 
-#calc(pass_list)#逆ポーランド記法を渡す
 
