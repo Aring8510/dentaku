@@ -1,5 +1,7 @@
-#-----------------------------------------------------------------------------#
+#-------------------------------(メソッド)---------------------------------------------#
 def calc(arg_list):#逆ポーランド記法を受け取り，計算結果を返すメソッド
+    if len(arg_list)==1:
+        return arg_list[0]
     while len(arg_list)>1:#リストがただ一つの数値となった場合計算を終了する
         for i in range(len(arg_list)):#リストの個数分
             if isinstance(arg_list[i],str):#文字列すなわち演算子ならば
@@ -19,6 +21,10 @@ def calc(arg_list):#逆ポーランド記法を受け取り，計算結果を返
                 del arg_list[i-1]
                 #print(arg_list)
                 break
+            
+
+
+    
     print("計算結果："+str(arg_list[i-2]))#計算結果を出力
     return arg_list[i-2]
 #-----------------------------------------------------------------------------------#
@@ -59,7 +65,6 @@ def conv_RPN(rpn):#中間記法を逆ポーランド記法へ変換する
             rpn_nest.append(0)
     #print(rpn_nest)
     #print("最大深さ："+str(maxnest))
-#---*---*---*---*---*---*---*---*---*---*---*---*---*---*---*---*---*---*---*---*#
     for i in range(len(remove_list)):#括弧の部分を削除
         del rpn[remove_list[i]-i]
         del rpn_nest[remove_list[i]-i]
@@ -92,10 +97,11 @@ def conv_RPN(rpn):#中間記法を逆ポーランド記法へ変換する
     #print(rpn_nest)
     #print(rpn)
     return rpn
+#------------------------------------------------------------------------------------#
 def memory_return(arg,memo):
     if  arg.replace("m","").isdigit():
         if int(arg.replace("m",""))<=len(memo)-1:
-            print("call memoret")
+            #print("call memoret")
             return str(memo[int(arg.replace("m",""))])
         else:
             print("メモリーが範囲外です．0を返します")
