@@ -20,30 +20,30 @@ def calc(arg_list):#逆ポーランド記法を受け取り，計算結果を返
                 del arg_list[i-1]#空いたリスト2つを削除
                 del arg_list[i-1]
                 #print(arg_list)
-                break
-            
-
-
-    
+                break#whileから抜ける
     print("計算結果："+str(arg_list[i-2]))#計算結果を出力
     return arg_list[i-2]
 #-----------------------------------------------------------------------------------#
 def conv_ch_to_num(ch):#文字列を数値に変換可能か確認する
     comma=0
+    or_Negative = 1
     if ch.rfind(".")!=-1:#"."を含むかどうか
         comma=len(ch)-ch.rfind(".")-1#コンマの場所を記憶
         ch=ch.replace(".","")#isdigitは小数に対応していないので一時的にコンマを削除
+    if ch.startswith("-"):#負の数の場合
+        ch=ch.replace("-","")
+        or_Negative = -1
     if ch.isdigit():#数値かどうか
-        ch = int(ch)/(10**(comma))#数値なら小数を直す
+        ch = int(ch)/(10**(comma))*or_Negative#数値なら小数を直す
         return ch
     else :
         return ch
 #------------------------------------------------------------------------------------#
 def conv_RPN(rpn):#中間記法を逆ポーランド記法へ変換する
-    nest = 0
-    maxnest=0
-    remove_list = []
-    rpn_nest = []
+    nest = 0#計算の優先度
+    maxnest=0#最も大きいnest
+    remove_list = []#括弧の場所
+    rpn_nest = []#優先度のリスト
     for i in range(len(rpn)):
         if rpn[i]=='(':
             nest+=1
@@ -93,12 +93,11 @@ def conv_RPN(rpn):#中間記法を逆ポーランド記法へ変換する
                         break
                     index+=1
             search_index+=1
-
     #print(rpn_nest)
-    #print(rpn)
+    print(rpn)
     return rpn
 #------------------------------------------------------------------------------------#
-def memory_return(arg,memo):
+def memory_return(arg,memo):#メモリを返す
     if  arg.replace("m","").isdigit():
         if int(arg.replace("m",""))<=len(memo)-1:
             #print("call memoret")
@@ -127,11 +126,7 @@ while 1:
     for i in range(len(input_list)):
         if input_list[i].find('m')==0:
             input_list[i]=memory_return(input_list[i],memo)
-
-    #print(input_list)
     for i in range(len(input_list)):#引数の型をただす
         input_list[i]=conv_ch_to_num(input_list[i])
     memo.append(calc(conv_RPN(input_list)))
     print("メモリー："+str(memo)+"\n------------------------------------------------------")
-
-
