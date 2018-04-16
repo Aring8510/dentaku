@@ -5,22 +5,19 @@ def calc(arg_list):#逆ポーランド記法を受け取り，計算結果を返
             if isinstance(arg_list[i],str):#文字列すなわち演算子ならば
                 if arg_list[i]=='+':#足し算ならば
                     arg_list[i-2]+=arg_list[i-1]#足す
-                    print(arg_list)
                 elif arg_list[i]=='*':
                     arg_list[i-2]*=arg_list[i-1]
-                    print(arg_list)
                 elif arg_list[i]=='-':
                     arg_list[i-2]-=arg_list[i-1]
-                    print(arg_list)
                 elif arg_list[i]=='/':
                     if arg_list[i-1]!=0:#0除算でない場合
                         arg_list[i-2]=arg_list[i-2]/arg_list[i-1]#割る
-                        print(arg_list)
                     else:#0除算の場合
                         print("注意!!\n0で除算されました")#警告を出す
                         arg_list[i-2]=0#0を返す（仕様）
                 del arg_list[i-1]#空いたリスト2つを削除
                 del arg_list[i-1]
+                print(arg_list)
                 break
     print(arg_list[i-2])#計算結果を出力
     return
@@ -61,12 +58,11 @@ def conv_RPN(rpn):#中間記法を逆ポーランド記法へ変換する
         else :
             rpn_nest.append(0)
     print(rpn_nest)
-    print(maxnest)
+    print("最大深さ："+str(maxnest))
 #---*---*---*---*---*---*---*---*---*---*---*---*---*---*---*---*---*---*---*---*#
     for i in range(len(remove_list)):#括弧の部分を削除
         del rpn[remove_list[i]-i]
         del rpn_nest[remove_list[i]-i]
-    print(rpn_nest)
     for i in range(maxnest):
         search_nest=maxnest-i
         search_index=0
@@ -98,13 +94,18 @@ def conv_RPN(rpn):#中間記法を逆ポーランド記法へ変換する
     return rpn
 
 #------------------------------(メイン)--------------------------------------#
-import sys#コマンドライン引数を受け取る
-del sys.argv[0]#ファイル名削除
-print(sys.argv)
-for i in range(len(sys.argv)):#引数の型をただす
-    sys.argv[i]=conv_ch_to_num(sys.argv[i])
-print(sys.argv)
-calc(conv_RPN(sys.argv))
+#import sys#コマンドライン引数を受け取る
+#del sys.argv[0]#ファイル名削除
+#print(sys.argv)
+print("半角スペース区切りで計算式を入力\n括弧付き計算可能")
+input_list = ""
+input_list = input()
+input_list = input_list.split()
+print(input_list)
+for i in range(len(input_list)):#引数の型をただす
+    input_list[i]=conv_ch_to_num(input_list[i])
+print()
+calc(conv_RPN(input_list))
 
 #calc(pass_list)#逆ポーランド記法を渡す
 
